@@ -22,9 +22,36 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Supabase Upload App',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      title: 'Ecuador Blog Turistico ',
+      theme: ThemeData(
+        primaryColor: const Color(0xFF1E88E5), // Azul principal
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF1E88E5),
+          primary: const Color(0xFF1E88E5), // Azul
+          secondary: const Color(0xFFFFC107), // Amarillo
+          background: const Color(0xFFE3F2FD), // Celeste claro
+        ),
+        scaffoldBackgroundColor: const Color(0xFFE3F2FD),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF1E88E5),
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
+            textStyle: const TextStyle(fontSize: 18),
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      ),
       home: const AuthGate(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -100,68 +127,135 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login Supabase')),
       body: Center(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.lock_outline, size: 64, color: Colors.blue),
-                const SizedBox(height: 24),
-                DropdownButtonFormField<String>(
-                  value: _selectedRole,
-                  decoration: const InputDecoration(
-                    labelText: '¿Cómo deseas ingresar?',
-                    border: OutlineInputBorder(),
-                  ),
-                  items: const [
-                    DropdownMenuItem(
-                      value: 'Visitador',
-                      child: Text('Como Visitador'),
+          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
+          child: Card(
+            elevation: 10,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+            child: Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Logo turístico
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset(
+                      'assets/ecuador_tourist_blog.png',
+                      height: 100,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => const Icon(
+                        Icons.travel_explore,
+                        size: 80,
+                        color: Color(0xFF388E3C), // Verde
+                      ),
                     ),
-                    DropdownMenuItem(
-                      value: 'Publicador',
-                      child: Text('Como Publicador'),
+                  ),
+                  const SizedBox(height: 18),
+                  Text(
+                    'ECUADOR BLOC TURISTICO',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF1E88E5),
+                      letterSpacing: 1.2,
                     ),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedRole = value!;
-                    });
-                  },
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Correo electrónico',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.email_outlined),
                   ),
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Contraseña',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.lock_outline),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Descubre, comparte y explora Ecuador',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.blueGrey[700],
+                    ),
                   ),
-                  obscureText: true,
-                ),
-                const SizedBox(height: 28),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: login,
-                    child: const Text('Iniciar sesión'),
+                  const SizedBox(height: 24),
+                  DropdownButtonFormField<String>(
+                    value: _selectedRole,
+                    decoration: InputDecoration(
+                      labelText: '¿Cómo deseas ingresar?',
+                      prefixIcon: Icon(
+                        _selectedRole == 'Publicador'
+                            ? Icons.edit_location_alt
+                            : Icons.hiking,
+                        color: const Color(0xFFFFC107),
+                      ),
+                    ),
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'Visitador',
+                        child: Row(
+                          children: [
+                            Icon(Icons.hiking, color: Color(0xFF388E3C)),
+                            SizedBox(width: 8),
+                            Text('Como Visitador'),
+                          ],
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 'Publicador',
+                        child: Row(
+                          children: [
+                            Icon(Icons.edit_location_alt, color: Color(0xFFFFC107)),
+                            SizedBox(width: 8),
+                            Text('Como Publicador'),
+                          ],
+                        ),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedRole = value!;
+                      });
+                    },
                   ),
-                ),
-                TextButton(onPressed: signup, child: const Text('Registrarse')),
-              ],
+                  const SizedBox(height: 18),
+                  TextField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Correo electrónico',
+                      prefixIcon: const Icon(Icons.email_outlined, color: Color(0xFF1E88E5)),
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  const SizedBox(height: 14),
+                  TextField(
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Contraseña',
+                      prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF388E3C)),
+                    ),
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 26),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: login,
+                      icon: const Icon(Icons.login, color: Colors.white),
+                      label: const Text('Iniciar sesión'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF1E88E5),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        textStyle: const TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextButton.icon(
+                    onPressed: signup,
+                    icon: const Icon(Icons.person_add_alt_1, color: Color(0xFFFFC107)),
+                    label: const Text('Registrarse'),
+                    style: TextButton.styleFrom(
+                      foregroundColor: const Color(0xFF1E88E5),
+                      textStyle: const TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
